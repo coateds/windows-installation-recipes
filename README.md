@@ -3,13 +3,32 @@
 This is my library cookbook for Windows. It will combine code/resources from cookbooks/recipes such as:
 
 * windows-rdp
-* install-windows-packages
-* Install_Packages
 * windows_tweaks
   * default (disable-servermanager, make PowerShell link)
   * windows-rdp (enable rdp for my HyperV image)
   * install-iis (includes server-info functionality)
 * windows_ad (supermarket cookbook see xp-host-int-kit for example usage)
+
+## Notes from Install_Packages for updating a library cookbook in GitHub
+This is a kitchen sink and instructional cookbook/recipe. The intent is to load up every possible package I use, particularly Chocolatey packages. For on-the-fly builds, I can just create a dependency on this cookbook and build an attributes\default.rb where the packages to be installed are taken from the list below.
+
+## Instructions for use in a local cookbook
+* In metadata.rb
+  * depends 'Install_Packages', '>= 0.1.0'
+* In Berksfile
+  * cookbook "Install_Packages", "~> 0.1.0", git: "https://github.com/coateds/Install_Packages.git", ref: "42f15fcadbbdae33dae1daaa291b68bbaccbe9fb"
+  * berks install (optional?)
+* In the default recipe
+  * include_recipe 'Install_Packages'
+## Instructions for upgrading
+* Make desired changes to this cookbook
+  * Bump the version in metadata as needed
+  * commit the changes in Git
+  * push the changes to GitHub
+  * use git log to get the revision number of the commit
+* Make changes to cookbooks that will consume this cookbook
+  * Update the Berksfile with cookbook version and ref
+  * berks update Install_Packages
 
 Notes on the Chocolatey cookbook
 * https://supermarket.chef.io/cookbooks/chocolatey
