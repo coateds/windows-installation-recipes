@@ -64,7 +64,7 @@ end
 if node['install-packages']['winazpowershell'].to_s == 'y'
   chocolatey_package 'windowsazurepowershell' do
     action :install
-    # notifies :reboot_now, 'reboot[restart-computer]', :delayed
+    notifies :reboot_now, 'reboot[restart-computer]', :delayed
   end
 end
 
@@ -77,7 +77,7 @@ if node['install-packages']['powershell51'].to_s == 'y'
     source 'Win8.1AndW2K12R2-KB3191564-x64.msu'
     # action :remove
     action :install
-    # notifies :reboot_now, 'reboot[Restart Computer]', :immediately
+    notifies :reboot_now, 'reboot[restart-computer]', :delayed
   end
 end
 
@@ -86,6 +86,10 @@ if node['install-packages']['requestreboot'].to_s == 'y'
     action :request_reboot
     ignore_failure
   end
+end
+
+reboot 'restart-computer' do
+  action :nothing
 end
 
 # notifies :reboot_now, 'reboot[Restart Computer]', :immediately
