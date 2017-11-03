@@ -1,0 +1,112 @@
+<html>
+<body>
+  <!-- A Table of Ohai information -->
+  <h1>Chef 'BGInfo' from Ohai on host <%= node['hostname'] %></h1>
+  <Table cellspacing=5 cellpadding=5>
+    <tr>
+      <td>Platform</td>
+      <td><%= node['platform'] %></td>
+    </tr>
+    <tr>
+      <td>Platform Version</td>
+      <td><%= node['platform_version'] %></td>
+    </tr>
+    <tr>
+      <td>Platform Family</td>
+      <td><%= node['platform_family'] %></td>
+    </tr>
+    <tr>
+      <td>IP Address</td>
+      <td><%= node['ipaddress'] %></td>
+    </tr>
+    <tr>
+      <td>MAC Address</td>
+      <td><%= node['macaddress'] %></td>
+    </tr>
+    <tr>
+      <td>FQDN</td>
+      <td><%= node['fqdn'] %></td>
+    </tr>
+    <tr>
+      <td>Hostname</td>
+      <td><%= node['hostname'] %></td>
+    </tr>
+    <tr>
+      <td>Domain</td>
+      <td><%= node['domain'] %></td>
+    </tr>
+    <tr>
+      <td>Recipes</td>
+      <td><%= node['recipes'] %></td>
+    </tr>
+    <tr>
+      <td>Roles</td>
+      <td><%= node['roles'] %></td>
+    </tr>
+    <tr>
+      <td>Ohai Time</td>
+      <td><%= node['ohai_time'] %></td>
+    </tr>
+    <tr>
+      <td>cpu</td>
+      <td><%= node['cpu'] %></td>
+    </tr>
+    <tr>
+      <td>cpu real</td>
+      <td><%= node['cpu']['real'] %></td>
+    </tr>
+    <tr>
+      <td>cpu cores</td>
+      <td><%= node['cpu']['cores'] %></td>
+    </tr>
+    <tr>
+      <td>cpu total</td>
+      <td><%= node['cpu']['total'] %></td>
+    </tr>
+    <tr>
+      <td>filesystem</td>
+      <td><%= node['filesystem'] %></td>
+    </tr>
+    <tr>
+      <td>filesystem drive</td>
+      <td><%= node['filesystem']['C:']['mount'] %></td>
+    </tr>
+    <tr>
+      <td>filesystem percent used</td>
+      <td><%= node['filesystem']['C:']['percent_used'] %></td>
+    </tr>
+    <tr>
+      <td>memory</td>
+      <td><%= node['memory'] %></td>
+    </tr>
+    <tr>
+      <td>memory total</td>
+      <td><%= node['memory']['total'] %></td>
+    </tr>
+    <tr>
+      <td>network</td>
+      <td><%= node['network'] %></td>
+    </tr>
+    <tr>
+      <td>dhcp enabled</td>
+      <% if false %>
+      This is a comment block in Extended Ruby
+      The following 'dhcp_enabled' does not always work, so it is commented out in a single line for now
+      <% end %>
+      <td><%#= node['network']['interfaces']['0xe']['configuration']['dhcp_enabled'] #%></td>
+    </tr>
+    <tr>
+      <td>virtualizationinfo</td>
+      <td><%= node['VirtualizationInfo'] %></td>
+    </tr>
+  </Table>
+
+Much of this information gleaned from  ruby files here:
+https://github.com/chef/ohai/tree/13485c17da688654890047d1952d9f71e735d162/lib/ohai/plugins/windows
+
+  <br><br>
+  <p>Last Update <%= node['last_update'] %></p>
+  <p>Recipe Variable <%= node['recipe_var'] %></p>
+
+</body>
+</html>

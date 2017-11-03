@@ -1,5 +1,14 @@
 # windows-installation-recipes
 
+## Next Version goals:
+* Make this work with Windows Hyper-V kitchen VMs
+
+## Version 0.1.1
+This version has been minimally tested with windows on Azure for the following recipes:
+* include_recipe 'windows-installation-recipes::windows-tweaks'
+* include_recipe 'windows-installation-recipes::install-iis-serverinfo'
+* include_recipe 'windows-installation-recipes::install-packages'
+
 This is my library cookbook for Windows. It will combine code/resources from cookbooks/recipes such as:
 
 * windows-rdp
@@ -16,6 +25,7 @@ This is a kitchen sink and instructional cookbook/recipe. The intent is to load 
 * In metadata.rb
   * depends 'Install_Packages', '>= 0.1.0'
 * In Berksfile
+  * cookbook "windows-installation-recipes", path: "C:/Users/user/Documents/GitRepositories/windows-installation-recipes"
   * cookbook "Install_Packages", "~> 0.1.0", git: "https://github.com/coateds/Install_Packages.git", ref: "42f15fcadbbdae33dae1daaa291b68bbaccbe9fb"
   * berks install (optional?)
 * In the default recipe
