@@ -8,9 +8,11 @@
 # package installation section
 
 # Testing for installed apps
-#!!! Missing a test for PowerShell !!!
-#Will the test be different for Choco v MSU install
-#I think I prefer obtaining a version via $PSVersionTable.PSVersion
+# Test for PowerShell
+describe command("$PSVersionTable.PSVersion.Major.ToString()+'.'+$PSVersionTable.PSVersion.Minor.ToString()") do
+  its('exit_status') { should eq 0 }
+  its('stdout') { should match('5.1') }
+end
 
 
 # Test for a list of apps
@@ -20,6 +22,11 @@
 #    it { should be_installed }
 #  end
 #end
+
+describe command('choco -v') do
+  its('exit_status') { should eq 0 }
+  its('stdout') { should match('0.10.8') }
+end
 
 # Most of the following describe blocks will run choco list...
 # and capture/test its output
