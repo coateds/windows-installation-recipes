@@ -15,3 +15,8 @@ end
 cookbook_file 'C:\Users\Public\Desktop\Windows PowerShell.lnk' do
   source 'Windows PowerShell.lnk'
 end
+
+powershell_script 'rename-computer' do
+  code 'Rename-Computer -NewName hyperwindows'
+  not_if '$env:COMPUTERNAME -eq "hyperwindows"'
+end
