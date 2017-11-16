@@ -46,7 +46,11 @@ Notes on the Chocolatey cookbook
 * For integration testing, look https://github.com/chocolatey/chocolatey-cookbook/blob/master/test/integration/chef_latest/default_spec.rb
 * At this time, I do not think there is a unit test for installing Chocolatey
 
-## Recipe: install-windows-packages
+## Recipe: windows-tweaks
+
+## Recipe: install-iis-serverinfo
+
+## Recipe: install-windows-packages (renamed to install-packages)
 This is designed to be a true, attribute driven, library recipe to be called from a wrapper cookbook. It contains a series of resource blocks that install specific software packages with options and customizations. At a minimum, the examples here can be copied to other cookbooks and as such this can be treated as a documentation point. This documentation will extend to ChefSpec and InSpec tests in install-packages_spec.rb and install-packages_test.rb files.
 
 Most of work here is done with the `chocolatey_package` resource. However, this resource cannot install MSU packages. (This cannot be done over PS Remote) The recipe contains an example for installing PS5.1 using the `msu_package`.
@@ -99,7 +103,7 @@ default['install-packages']['winazpowershell'] = 'y'
 default['install-packages']['requestreboot']   = 'y'
 ```
 
-## An example to consider:
+### An example to consider:
 ```
 #### recipe ####
 include_recipe 'chocolatey'
@@ -194,4 +198,11 @@ describe 'ipc_windows::chocolatey' do
   end
 end
 #### /ChefSpec test ####
+```
+
+## Recipe: access-rdp
+
+Attributes
+```
+
 ```

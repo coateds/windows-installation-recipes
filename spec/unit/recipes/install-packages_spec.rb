@@ -41,11 +41,11 @@ describe 'windows-installation-recipes::install-packages' do
 
     # Test for a list of apps
     # Each item will be treated as a single test
-    #%w(chefdk putty sysinternals curl poshgit pester rdcman slack azurestorageexplorer).each do |item|
-    #  it 'installs a package' do
-    #    expect(chef_run).to install_chocolatey_package(item)
-    #  end
-    #end
+    # %w(chefdk putty sysinternals curl poshgit pester rdcman slack azurestorageexplorer).each do |item|
+    #   it 'installs a package' do
+    #     expect(chef_run).to install_chocolatey_package(item)
+    #   end
+    # end
 
     # The following installation will require a reboot
     it 'installs a package' do
@@ -64,7 +64,7 @@ describe 'windows-installation-recipes::install-packages' do
     end
 
     ### Use these together ###
-    #These two blocks will test with the expectation of an explicit reboot
+    # These two blocks will test with the expectation of an explicit reboot
     it 'creates the file Win8.1AndW2K12R2-KB3191564-x64.msu in cache' do
       expect(chef_run).to create_cookbook_file('Win8.1AndW2K12R2-KB3191564-x64.msu')
     end
@@ -105,7 +105,6 @@ describe 'windows-installation-recipes::install-packages' do
     ### /Use these together ###
 
     # /package installation section
-
 
     it 'converges successfully' do
       expect { chef_run }.to_not raise_error

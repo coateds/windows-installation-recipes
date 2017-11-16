@@ -16,7 +16,17 @@ cookbook_file 'C:\Users\Public\Desktop\Windows PowerShell.lnk' do
   source 'Windows PowerShell.lnk'
 end
 
-powershell_script 'rename-computer' do
-  code 'Rename-Computer -NewName hyperwindows'
-  not_if '$env:COMPUTERNAME -eq "hyperwindows"'
-end
+# Rename the computer is not equal to 'no-new-name'
+# if node['windows-tweaks']['new-computername'].to_s != 'no-new-name'
+#   puts node['windows-tweaks']['new-computername']
+#   powershell_script 'rename-computer' do
+#     code "Rename-Computer -NewName #{node['windows-tweaks']['new-computername']}"
+#     not_if "env:COMPUTERNAME -eq #{node['windows-tweaks']['new-computername']}"
+#   end
+# end
+
+# Still working on the logic and syntax here
+# powershell_script 'rename-computer' do
+#   code "Rename-Computer -NewName #{node['windows-tweaks']['new-computername']}"
+#   not_if "(env:COMPUTERNAME -eq #{node['windows-tweaks']['new-computername']} OR #{node['windows-tweaks']['new-computername']} -ne 'no-new-name'"
+# end

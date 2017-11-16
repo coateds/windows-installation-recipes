@@ -14,14 +14,13 @@ describe command("$PSVersionTable.PSVersion.Major.ToString()+'.'+$PSVersionTable
   its('stdout') { should match('5.1') }
 end
 
-
 # Test for a list of apps
 # Each item will be treated as a single test
-#%w(slack git putty curl).each do |item|
-#  describe package(item) do
-#    it { should be_installed }
-#  end
-#end
+# %w(slack git putty curl).each do |item|
+#   describe package(item) do
+#     it { should be_installed }
+#   end
+# end
 
 describe command('choco -v') do
   its('exit_status') { should eq 0 }

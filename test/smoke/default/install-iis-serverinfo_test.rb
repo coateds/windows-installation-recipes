@@ -11,7 +11,7 @@ describe port(80) do
 end
 
 describe windows_feature('IIS-WebServerRole') do
-  it{ should be_installed }
+  it { should be_installed }
 end
 
 describe service('w3svc') do
@@ -20,7 +20,7 @@ describe service('w3svc') do
   it { should be_running }
 end
 
-describe command('(Invoke-WebRequest localhost).StatusCode') do 
+describe command('(Invoke-WebRequest localhost).StatusCode') do
   its('stdout') { should match '200' }
 end
 #### /install-iis-serverinfo ####
