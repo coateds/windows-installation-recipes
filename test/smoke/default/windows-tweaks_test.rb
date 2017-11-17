@@ -5,14 +5,28 @@
 # The Inspec reference, with examples and extensive documentation, can be
 # found at http://inspec.io/docs/reference/resources/
 
-unless os.windows?
-  # This is an example test, replace with your own test.
-  describe user('root'), :skip do
-    it { should exist }
-  end
+#### windows-tweaks ####
+describe directory('C:\scripts') do
+  it { should exist }
 end
 
-# This is an example test, replace it with your own test.
-describe port(80), :skip do
-  it { should_not be_listening }
+describe file('C:\Users\Public\Desktop\Windows PowerShell.lnk') do
+  it { should exist }
 end
+
+describe windows_task ('\Microsoft\Windows\Server Manager\ServerManager') do
+  it { should be_disabled }
+end
+
+script = <<-EOH
+  $env:COMPUTERNAME
+EOH
+
+# not completely happy with the match vs eq
+# The output of the script is "SERVERX5\r\n"
+# I tried the appeand .replace("\r\n", "") and it did not work
+# might keep trying variants later
+describe powershell(script) do
+  its('stdout') { should match 'SERVERX5' }
+end
+#### /windows-tweaks ####
