@@ -69,3 +69,21 @@ reboot 'restart-computer' do
 end
 
 # notifies :reboot_now, 'reboot[Restart Computer]', :immediately
+
+cookbook_file 'c:\scripts\install-pswindowsupdate.ps1' do
+  source 'install-pswindowsupdate.ps1'
+end
+
+# This resource block MUST occur after the post WMF 5.1 installation AND reboot
+# Add-WUServiceManager -ServiceID 7971f918-a847-4430-9279-4a52d1efe18d
+powershell_script 'installpswindowsupdate' do
+  code <<-EOH
+  Install-PackageProvider -Name "NuGet" -Force
+  Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
+  Install-Module -name PSWindowsUpdate -Force
+  EOH
+  not_if "(Get-Module -ListAvailable -Name PSWindowsUpdate).Name -eq 'PSWindowsUpdate'"
+end
+
+# Command to run windows update
+# Get-WUInstall –MicrosoftUpdate –AcceptAll –AutoReboot
