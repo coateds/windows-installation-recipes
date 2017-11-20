@@ -7,9 +7,10 @@
 # Join coatelab.com domain
 # The resource name in the first line does not seem to matter
 windows_ad_computer 'This_Computer' do
-  action :join
+  action :unjoin
   domain_pass 'H0rnyBunny'
   domain_user 'Administrator'
-  domain_name 'coatelab.com'
+  domain_name 'expcoatelab.com'
+  # domain_name node['active-directory']['domain-name']
   restart true
 end
