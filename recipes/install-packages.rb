@@ -70,9 +70,9 @@ end
 
 # notifies :reboot_now, 'reboot[Restart Computer]', :immediately
 
-cookbook_file 'c:\scripts\install-pswindowsupdate.ps1' do
-  source 'install-pswindowsupdate.ps1'
-end
+# cookbook_file 'c:\scripts\install-pswindowsupdate.ps1' do
+#   source 'install-pswindowsupdate.ps1'
+# end
 
 # This resource block MUST occur after the post WMF 5.1 installation AND reboot
 # Add-WUServiceManager -ServiceID 7971f918-a847-4430-9279-4a52d1efe18d
