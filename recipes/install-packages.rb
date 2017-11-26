@@ -82,6 +82,8 @@ powershell_script 'installpswindowsupdate' do
   Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
   Install-Module -name PSWindowsUpdate -Force
   EOH
+  # Add -or [if PS -ne 5.1]
+  # "$PSVersionTable.PSVersion.Major.ToString()+'.'+$PSVersionTable.PSVersion.Minor.ToString()"
   not_if "(Get-Module -ListAvailable -Name PSWindowsUpdate).Name -eq 'PSWindowsUpdate'"
 end
 

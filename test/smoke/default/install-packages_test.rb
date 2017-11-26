@@ -9,10 +9,13 @@
 
 # Testing for installed apps
 # Test for PowerShell
-describe command("$PSVersionTable.PSVersion.Major.ToString()+'.'+$PSVersionTable.PSVersion.Minor.ToString()") do
-  its('exit_status') { should eq 0 }
-  its('stdout') { should match('5.1') }
-end
+# should match does a starts with compare
+# use stdout.chop to do an exact match with eq
+  describe command("$PSVersionTable.PSVersion.Major.ToString()+'.'+$PSVersionTable.PSVersion.Minor.ToString()") do
+    its('exit_status') { should eq 0 }
+    #its('stdout') { should match('5.1') }
+    its('stdout.chop') { should eq '5.1' }
+  end
 
 # Test for a list of apps
 # Each item will be treated as a single test
@@ -87,6 +90,11 @@ end
 # This one package can be tested with the generic package test
 describe package('slack') do
   it { should be_installed }
+end
+
+describe command('(Get-Module -ListAvailable -Name PSWindowsUpdate).Name') do
+  its('exit_status') { should eq 0 }
+  its('stdout.chop') { should eq 'PSWindowsUpdate' }
 end
 
 # /package installation section
