@@ -59,16 +59,49 @@ $Socket.Close()
 $Seconds = [BitConverter]::ToUInt32( $NTPData[43..40], 0 )
 
 # Add them to the "Start of Epoch", convert to local time zone, and return
-return ( [datetime]'1/1/1900' ).AddSeconds( $Seconds ).ToLocalTime()
+# return ( [datetime]'1/1/1900' ).AddSeconds( $Seconds ).ToLocalTime()
+
+# $obj = New-Object -TypeName PSObject
+# Add-Member -InputObject $obj -MemberType NoteProperty -Name NTPTime -Value ( [datetime]'1/1/1900' ).AddSeconds( $Seconds ).ToLocalTime()
+# Add-Member -InputObject $obj -MemberType NoteProperty -Name SYSTime -Value get-date
+
+# Write-Host $obj --Does Nothing?--
+
+# return $obj
+
+$NTPTime = ([datetime]'1/1/1900' ).AddSeconds( $Seconds ).ToLocalTime()
+$SysTime = Get-Date
+$DiffTime = $NTPTime - $SysTime
+
+$RetString = $SysTime.ToString()
+$RetString += '~'
+$RetString += $NTPTime.ToString()
+$RetString += '~'
+$RetString += [math]::abs(($NTPTime - $SysTime).TotalSeconds)
+
+
+return $RetString
+
 EOH
 cmd = powershell_out(get_ntp_script)
 # fw_rule_enabled = cmd.stdout.chop.to_s
 # puts fw_rule_enabled
 
+# Return one line from the array. Unpredicatable
+# arr = cmd.stdout.split(/\n\n*/)
+# puts arr[3]
+
+# puts cmd.stdout
+
+arr = cmd.stdout.split('~')
 
 node.default['last_update'] = powershell_out('(get-hotfix | sort installedon | select -last 1).InstalledOn').stdout.chop.to_s
-node.default['system_time'] = powershell_out('get-date').stdout.chop.to_s
-node.default['ntp_time'] = cmd.stdout.chop.to_s
+# node.default['system_time'] = powershell_out('get-date').stdout.chop.to_s
+
+node.default['system_time'] = arr[0]
+node.default['ntp_time'] = arr[1]
+node.default['delta_time_seconds'] = arr[2]
+
 #node.default['is_correct_time'] = powershell_out('((Invoke-WebRequest -Uri \'time.is\').rawcontent).contains(\'Your time is exact\')').stdout
 # .contains('Your time is exact')
 
