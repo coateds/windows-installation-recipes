@@ -1,7 +1,16 @@
 # windows-installation-recipes
 
 ## Next Version goals:
-* Make this work with Windows Hyper-V kitchen VMs
+* Make this work with Windows Hyper-V kitchen VMs - (Mostly) Done
+
+## Version 0.2.0
+Recipes
+* access-rdp
+* active-directory
+* install-iis-serverinfo
+* install-packages
+* powershell-demo
+* windows-tweaks
 
 ## Version 0.1.1
 This version has been minimally tested with windows on Azure for the following recipes:
@@ -9,19 +18,23 @@ This version has been minimally tested with windows on Azure for the following r
 * include_recipe 'windows-installation-recipes::install-iis-serverinfo'
 * include_recipe 'windows-installation-recipes::install-packages'
 
-This is my library cookbook for Windows. It will combine code/resources from cookbooks/recipes such as:
-
-* windows-rdp
-* windows_tweaks
-  * default (disable-servermanager, make PowerShell link)
-  * windows-rdp (enable rdp for my HyperV image)
-  * install-iis (includes server-info functionality)
-* windows_ad (supermarket cookbook see xp-host-int-kit for example usage)
-
-## Notes from Install_Packages for updating a library cookbook in GitHub
-This is a kitchen sink and instructional cookbook/recipe. The intent is to load up every possible package I use, particularly Chocolatey packages. For on-the-fly builds, I can just create a dependency on this cookbook and build an attributes\default.rb where the packages to be installed are taken from the list below.
-
 ## Instructions for use in a local cookbook
+* In metadata.rb
+  * depends 'windows-installation-recipes'
+* In Berksfile
+  * cookbook "windows-installation-recipes", path: "C:/Users/dcoate/Documents/GitRepositories/windows-installation-recipes"
+* In default recipe
+```
+# include_recipe 'windows-installation-recipes::windows-tweaks'
+# include_recipe 'windows-installation-recipes::access-rdp'
+# include_recipe 'windows-installation-recipes::install-packages'
+# include_recipe 'windows-installation-recipes::active-directory'
+# include_recipe 'windows-installation-recipes::install-iis-serverinfo'
+# include_recipe 'windows-installation-recipes::powershell-demo'
+```
+uncomment as needed
+
+## Instructions for use in a local cookbook (Old)
 * In metadata.rb
   * depends 'Install_Packages', '>= 0.1.0'
 * In Berksfile
@@ -47,10 +60,72 @@ Notes on the Chocolatey cookbook
 * At this time, I do not think there is a unit test for installing Chocolatey
 
 ## Recipe: windows-tweaks
+* C:\scripts
+* Disable Server Manager Sched Task start at logon
+* PowerShell Shortcut on Desktop
+* Rename Computer
 
-## Recipe: install-iis-serverinfo
+Attributes:
+```
+#### windows-tweaks ####
+# Leave this at no-new-name to do nothing
+# Or set this to have a new name
+# default['windows-tweaks']['new-computername']  = 'no-new-name'
+default['windows-tweaks']['new-computername']  = '[new computer name]'
+#### /windows-tweaks ####
+```
+
+ChefSpec Unit Tests
+```diff
+-None at this time
+-Cannot handle the PowerShell script resource at all
+```
+
+InSpec Integration Tests
+```#### windows-tweaks ####
+describe directory('C:\scripts') do
+  it { should exist }
+end
+
+describe file('C:\Users\Public\Desktop\Windows PowerShell.lnk') do
+  it { should exist }
+end
+
+describe windows_task ('\Microsoft\Windows\Server Manager\ServerManager') do
+  it { should be_disabled }
+end
+
+script = <<-EOH
+  $env:COMPUTERNAME
+EOH
+
+# not completely happy with the match vs eq
+# The output of the script is "SERVERX5\r\n"
+# I tried the appeand .replace("\r\n", "") and it did not work
+# might keep trying variants later
+describe powershell(script) do
+  its('stdout.chop') { should eq '[EXPECTED NAME IN CAPS]' }
+end
+#### /windows-tweaks ####
+```
 
 ## Recipe: install-windows-packages (renamed to install-packages)
+This is a big recipe as I am storing a lot of information/instruction within
+* The first thing this recipe does is install Chocolatey using the supermarket Chocolatey resource. There is also a resource block to upgrade Chocolatey if specified in attributes.
+* Next it will upgrade PowerShell (to 5.1) if needed
+
+
+Attributes: (under construction)
+```
+# NOTE: attributes are case sensitive!!
+# set the following attributes to 'y' to install/upgrade
+default['install-packages']['upgrade-chocolatey'] = 'n'
+
+default['install-packages']['powershell51']       = 'y'
+```
+
+Earlier Documentation
+
 This is designed to be a true, attribute driven, library recipe to be called from a wrapper cookbook. It contains a series of resource blocks that install specific software packages with options and customizations. At a minimum, the examples here can be copied to other cookbooks and as such this can be treated as a documentation point. This documentation will extend to ChefSpec and InSpec tests in install-packages_spec.rb and install-packages_test.rb files.
 
 Most of work here is done with the `chocolatey_package` resource. However, this resource cannot install MSU packages. (This cannot be done over PS Remote) The recipe contains an example for installing PS5.1 using the `msu_package`.
@@ -102,6 +177,8 @@ default['install-packages']['slack']           = 'n'
 default['install-packages']['winazpowershell'] = 'y'
 default['install-packages']['requestreboot']   = 'y'
 ```
+
+## Recipe: install-iis-serverinfo
 
 ### An example to consider:
 ```

@@ -4,12 +4,44 @@
 #
 # Copyright:: 2017, The Authors, All Rights Reserved.
 
+# This will install Chocolatey if not already
 include_recipe 'chocolatey::default'
 
 # This will run an upgrade for images that include an old version
 if node['install-packages']['upgrade-chocolatey'].to_s == 'y'
   chocolatey_package 'chocolatey' do
     action :upgrade
+  end
+end
+
+if node['install-packages']['powershell51'].to_s == 'y'
+  cookbook_file 'Win8.1AndW2K12R2-KB3191564-x64.msu' do
+    source 'Win8.1AndW2K12R2-KB3191564-x64.msu'
+  end
+
+  # This resource is idempotent w/o the PS guard
+  msu_package 'Win8.1AndW2K12R2-KB3191564-x64.msu' do
+    source 'Win8.1AndW2K12R2-KB3191564-x64.msu'
+    # action :remove
+    action :install
+    notifies :reboot_now, 'reboot[restart-computer]', :immediate
+    # guard_interpreter :powershell_script
+    # not_if '$PSVersionTable.PSVersion.Major -ge 5'
+  end
+end
+
+# This resource block MUST occur after the post WMF 5.1 installation AND reboot
+# Add-WUServiceManager -ServiceID 7971f918-a847-4430-9279-4a52d1efe18d
+if node['install-packages']['PSWindowsUpdate'].to_s == 'y'
+  powershell_script 'installpswindowsupdate' do
+    code <<-EOH
+    Install-PackageProvider -Name "NuGet" -Force
+    Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
+    Install-Module -name PSWindowsUpdate -Force
+    EOH
+    # Add -or [if PS -ne 5.1]
+    # "$PSVersionTable.PSVersion.Major.ToString()+'.'+$PSVersionTable.PSVersion.Minor.ToString()"
+    not_if "(Get-Module -ListAvailable -Name PSWindowsUpdate).Name -eq 'PSWindowsUpdate'"
   end
 end
 
@@ -44,18 +76,7 @@ if node['install-packages']['winazpowershell'].to_s == 'y'
   end
 end
 
-if node['install-packages']['powershell51'].to_s == 'y'
-  cookbook_file 'Win8.1AndW2K12R2-KB3191564-x64.msu' do
-    source 'Win8.1AndW2K12R2-KB3191564-x64.msu'
-  end
 
-  msu_package 'Win8.1AndW2K12R2-KB3191564-x64.msu' do
-    source 'Win8.1AndW2K12R2-KB3191564-x64.msu'
-    # action :remove
-    action :install
-    notifies :reboot_now, 'reboot[restart-computer]', :delayed
-  end
-end
 
 if node['install-packages']['requestreboot'].to_s == 'y'
   reboot 'restart-computer' do
@@ -74,18 +95,7 @@ end
 #   source 'install-pswindowsupdate.ps1'
 # end
 
-# This resource block MUST occur after the post WMF 5.1 installation AND reboot
-# Add-WUServiceManager -ServiceID 7971f918-a847-4430-9279-4a52d1efe18d
-powershell_script 'installpswindowsupdate' do
-  code <<-EOH
-  Install-PackageProvider -Name "NuGet" -Force
-  Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
-  Install-Module -name PSWindowsUpdate -Force
-  EOH
-  # Add -or [if PS -ne 5.1]
-  # "$PSVersionTable.PSVersion.Major.ToString()+'.'+$PSVersionTable.PSVersion.Minor.ToString()"
-  not_if "(Get-Module -ListAvailable -Name PSWindowsUpdate).Name -eq 'PSWindowsUpdate'"
-end
+
 
 # Command to run windows update
 # Get-WUInstall –MicrosoftUpdate –AcceptAll –AutoReboot

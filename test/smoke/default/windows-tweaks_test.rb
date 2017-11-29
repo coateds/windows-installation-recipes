@@ -14,7 +14,7 @@ describe file('C:\Users\Public\Desktop\Windows PowerShell.lnk') do
   it { should exist }
 end
 
-describe windows_task ('\Microsoft\Windows\Server Manager\ServerManager') do
+describe windows_task('\Microsoft\Windows\Server Manager\ServerManager') do
   it { should be_disabled }
 end
 
@@ -27,6 +27,6 @@ EOH
 # I tried the appeand .replace("\r\n", "") and it did not work
 # might keep trying variants later
 describe powershell(script) do
-  its('stdout') { should match 'SERVERX5' }
+  its('stdout.chop') { should eq '[EXPECTED NAME IN CAPS]' }
 end
 #### /windows-tweaks ####
