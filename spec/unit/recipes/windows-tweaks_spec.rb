@@ -15,6 +15,23 @@ describe 'windows-installation-recipes::windows-tweaks' do
       runner.converge(described_recipe)
     end
 
+    #### windows-tweaks ####
+
+    # These tests tend to be case sensitive between test and resource
+    # ('c:\scripts' will not work)
+    it 'creates the directory c:\scripts' do
+      expect(chef_run).to create_directory('C:\scripts')
+    end
+
+    it 'disables the task \Microsoft\Windows\Server Manager\ServerManager' do
+      expect(chef_run).to disable_windows_task('\Microsoft\Windows\Server Manager\ServerManager')
+    end
+
+    it 'creates the cookbook file PowerShell/lnk' do
+      expect(chef_run).to create_cookbook_file('C:\Users\Public\Desktop\Windows PowerShell.lnk')
+    end
+    #### /windows-tweaks ####
+
     it 'converges successfully' do
       expect { chef_run }.to_not raise_error
     end

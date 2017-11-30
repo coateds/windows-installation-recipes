@@ -77,8 +77,25 @@ default['windows-tweaks']['new-computername']  = '[new computer name]'
 
 ChefSpec Unit Tests
 ```diff
--None at this time
+    #### windows-tweaks ####
+
+    # These tests tend to be case sensitive between test and resource
+    # ('c:\scripts' will not work)
+    it 'creates the directory c:\scripts' do
+      expect(chef_run).to create_directory('C:\scripts')
+    end
+
+    it 'disables the task \Microsoft\Windows\Server Manager\ServerManager' do
+      expect(chef_run).to disable_windows_task('\Microsoft\Windows\Server Manager\ServerManager')
+    end
+
+    it 'creates the cookbook file PowerShell/lnk' do
+      expect(chef_run).to create_cookbook_file('C:\Users\Public\Desktop\Windows PowerShell.lnk')
+    end
+    #### /windows-tweaks ####
+
 -Cannot handle the PowerShell script resource at all
+-Unless the guard on the powershell_resource is commented out, all tests will fail!
 ```
 
 InSpec Integration Tests
@@ -117,11 +134,28 @@ This is a big recipe as I am storing a lot of information/instruction within
 
 Attributes: (under construction)
 ```
-# NOTE: attributes are case sensitive!!
-# set the following attributes to 'y' to install/upgrade
-default['install-packages']['upgrade-chocolatey'] = 'n'
+#### install-packages ####
+default['install-packages']['upgrade-chocolatey'] = 'y'
 
+# PowerShell and modules
+# More work and testing is likely needed to handle all (likely) scenarios
+# Regarding what is installed and what needs to be upgraded
 default['install-packages']['powershell51']       = 'y'
+default['install-packages']['PSWindowsUpdate']    = 'y'
+
+default['install-packages']['git']             = 'y'
+
+default['install-packages']['vscode']          = 'n'
+default['install-packages']['putty']           = 'n'
+default['install-packages']['curl']            = 'n'
+default['install-packages']['azstorexplorer']  = 'n'
+default['install-packages']['chefdk']          = 'n'
+default['install-packages']['sysinternals']    = 'n'
+default['install-packages']['poshgit']         = 'n'
+default['install-packages']['pester']          = 'n'
+default['install-packages']['rdcman']          = 'n'
+default['install-packages']['slack']           = 'n'
+#### install-packages ####
 ```
 
 Earlier Documentation
