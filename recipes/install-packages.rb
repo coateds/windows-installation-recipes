@@ -40,7 +40,7 @@ end
 #     # Add -or [if PS -ne 5.1]
 #     # "$PSVersionTable.PSVersion.Major.ToString()+'.'+$PSVersionTable.PSVersion.Minor.ToString()"
 #     # not_if "(Get-Module -ListAvailable -Name PSWindowsUpdate).Name -eq 'PSWindowsUpdate'"
-# 
+#
 #     # New guard:   (Still testing)
 #     not_if "((Get-Module -ListAvailable -Name PSWindowsUpdate).Name -eq 'PSWindowsUpdate') -or ($PSVersionTable.PSVersion.Major.ToString()+'.'+$PSVersionTable.PSVersion.Minor.ToString() -ne '5.1')"
 #   end
@@ -50,6 +50,11 @@ end
 # This messes up existing tests
 # For now, uninstall old first then install the new
 if node['install-packages']['PSWindowsUpdate'].to_s == 'y'
+  powershell_script 'Uninstall PSWindowsUpdate' do
+    code "Uninstall-Module -Name PSWindowsUpdate"
+    not_if "(Get-Module -ListAvailable -Name PSWindowsUpdate).version.major -eq 2"
+  end
+
   powershell_package 'PSWindowsUpdate'
   # powershell_script 'update-pswindowsupdate' do
   #   code <<-EOH

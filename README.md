@@ -315,5 +315,7 @@ end
 
 Attributes
 ```
-
+default['my_windows_rdp']['AllowConnections']  = 'yes/no'
+default['my_windows_rdp']['AllowOnlyNLA']      = 'yes/no'
+default['my_windows_rdp']['ConfigureFirewall'] = 'yes/no'
 ```

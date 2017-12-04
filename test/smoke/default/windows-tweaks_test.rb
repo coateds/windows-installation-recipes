@@ -18,7 +18,7 @@ describe windows_task('\Microsoft\Windows\Server Manager\ServerManager') do
   it { should be_disabled }
 end
 
-script = <<-EOH
+computernamescript = <<-EOH
   $env:COMPUTERNAME
 EOH
 
@@ -26,7 +26,7 @@ EOH
 # The output of the script is "SERVERX5\r\n"
 # I tried the appeand .replace("\r\n", "") and it did not work
 # might keep trying variants later
-describe powershell(script) do
+describe powershell(computernamescript) do
   its('stdout.chop') { should eq '[EXPECTED NAME IN CAPS]' }
 end
 #### /windows-tweaks ####
