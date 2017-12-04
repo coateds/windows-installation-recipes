@@ -30,34 +30,35 @@ end
 
 # This resource block MUST occur after the post WMF 5.1 installation AND reboot
 # Add-WUServiceManager -ServiceID 7971f918-a847-4430-9279-4a52d1efe18d
-if node['install-packages']['PSWindowsUpdate'].to_s == 'y'
-  powershell_script 'installpswindowsupdate' do
-    code <<-EOH
-    Install-PackageProvider -Name "NuGet" -Force
-    Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
-    Install-Module -name PSWindowsUpdate -Force
-    EOH
-    # Add -or [if PS -ne 5.1]
-    # "$PSVersionTable.PSVersion.Major.ToString()+'.'+$PSVersionTable.PSVersion.Minor.ToString()"
-    # not_if "(Get-Module -ListAvailable -Name PSWindowsUpdate).Name -eq 'PSWindowsUpdate'"
-
-    # New guard:   (Still testing)
-    not_if "((Get-Module -ListAvailable -Name PSWindowsUpdate).Name -eq 'PSWindowsUpdate') -or ($PSVersionTable.PSVersion.Major.ToString()+'.'+$PSVersionTable.PSVersion.Minor.ToString() -ne '5.1')"
-  end
-end
+# if node['install-packages']['PSWindowsUpdate'].to_s == 'y'
+#   powershell_script 'installpswindowsupdate' do
+#     code <<-EOH
+#     Install-PackageProvider -Name "NuGet" -Force
+#     Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
+#     Install-Module -name PSWindowsUpdate -Force
+#     EOH
+#     # Add -or [if PS -ne 5.1]
+#     # "$PSVersionTable.PSVersion.Major.ToString()+'.'+$PSVersionTable.PSVersion.Minor.ToString()"
+#     # not_if "(Get-Module -ListAvailable -Name PSWindowsUpdate).Name -eq 'PSWindowsUpdate'"
+# 
+#     # New guard:   (Still testing)
+#     not_if "((Get-Module -ListAvailable -Name PSWindowsUpdate).Name -eq 'PSWindowsUpdate') -or ($PSVersionTable.PSVersion.Major.ToString()+'.'+$PSVersionTable.PSVersion.Minor.ToString() -ne '5.1')"
+#   end
+# end
 
 # Running Update-Module just adds the new version along side the current
 # This messes up existing tests
 # For now, uninstall old first then install the new
 if node['install-packages']['PSWindowsUpdate'].to_s == 'y'
-  powershell_script 'update-pswindowsupdate' do
-    code <<-EOH
-    Uninstall-Module -Name PSWindowsUpdate
-    Install-Module -Name PSWindowsUpdate
-    # Update-Module -Name PSWindowsUpdate -Confirm
-    EOH
-    not_if "(Get-Module -ListAvailable -Name PSWindowsUpdate).version.major -eq 2"
-  end
+  powershell_package 'PSWindowsUpdate'
+  # powershell_script 'update-pswindowsupdate' do
+  #   code <<-EOH
+  #   Uninstall-Module -Name PSWindowsUpdate
+  #   Install-Module -Name PSWindowsUpdate
+  #   # Update-Module -Name PSWindowsUpdate -Confirm
+  #   EOH
+  #   not_if "(Get-Module -ListAvailable -Name PSWindowsUpdate).version.major -eq 2"
+  # end
 end
 
 ########################
@@ -69,16 +70,13 @@ end
 if node['install-packages']['git'].to_s == 'y'
   chocolatey_package 'git' do
     options '--params /GitAndUnixToolsOnPath'
+    # action :uninstall
   end
 end
 
-# chocolatey_package 'visualstudiocode'
-# if node['install-packages']['vscode'].to_s == 'y'
-#   chocolatey_package 'visualstudiocode'
-# end
 # Alternative (and favored by cookstyle) syntax for a simple conditional
+# Use this syntax when there are no options and the default action is used
 chocolatey_package 'visualstudiocode' if node['install-packages']['vscode'].to_s == 'y'
-
 chocolatey_package 'chefdk' if node['install-packages']['chefdk'].to_s == 'y'
 chocolatey_package 'putty' if node['install-packages']['putty'].to_s == 'y'
 chocolatey_package 'sysinternals' if node['install-packages']['sysinternals'].to_s == 'y'

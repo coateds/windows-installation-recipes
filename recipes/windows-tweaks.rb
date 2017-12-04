@@ -35,7 +35,7 @@ end
 powershell_script 'rename-computer' do
   code "Rename-Computer -NewName #{node['windows-tweaks']['new-computername']}"
   # notifies :reboot_now, 'reboot[restart-computer]', :delayed
-  notifies :reboot_now, 'reboot[restart-computer]', :immediate
+  # notifies :reboot_now, 'reboot[restart-computer]', :immediate
   not_if "($env:COMPUTERNAME -eq \'#{node['windows-tweaks']['new-computername']}\') -or (\'#{node['windows-tweaks']['new-computername']}\' -eq 'no-new-name')"
 end
 
