@@ -47,6 +47,19 @@ describe command('choco list git --exact --local-only --limit-output') do
   its('stdout') { should match('git|') }
 end
 
+# Here the cli for Chocolatey is wrapped in PowerShell, in order to use the .substring command for just the first three chrs
+describe command('(invoke-expression "choco list git --exact --local-only --limit-output").substring(0,3)') do
+  its('exit_status') { should eq 0 }
+  its('stdout.chop') { should eq 'git' }
+end
+
+# Here the cli for Chocolatey is wrapped in PowerShell, in order to use the .substring command for just the first sixteen chrs
+describe command('(invoke-expression "choco list visualstudiocode --exact --local-only --limit-output").substring(0,16)') do
+  its('exit_status') { should eq 0 }
+  its('stdout.chop') { should eq 'visualstudiocode' }
+end
+
+
 describe command('choco list sysinternals --exact --local-only --limit-output') do
   its('exit_status') { should eq 0 }
   its('stdout') { should match('sysinternals|') }
