@@ -79,9 +79,20 @@ if node['install-packages']['git'].to_s == 'y'
   end
 end
 
+# Chocolatey attempts to install DotNet4.5.2 with VSCode
+# currently (Dec 2017) This fails
+# attempting to explicitly call this install ahead of VSCode
+# howwever, the DotNet install calls for a reboot
+if node['install-packages']['vscode'].to_s == 'y'
+  # chocolatey_package 'dotnet4.5.2'
+  chocolatey_package 'visualstudiocode'
+end
+
+
+
 # Alternative (and favored by cookstyle) syntax for a simple conditional
 # Use this syntax when there are no options and the default action is used
-chocolatey_package 'visualstudiocode' if node['install-packages']['vscode'].to_s == 'y'
+
 chocolatey_package 'chefdk' if node['install-packages']['chefdk'].to_s == 'y'
 chocolatey_package 'putty' if node['install-packages']['putty'].to_s == 'y'
 chocolatey_package 'sysinternals' if node['install-packages']['sysinternals'].to_s == 'y'
