@@ -34,7 +34,7 @@ end
 # Note that the not_if guard also runs PowerShell, but with slightly different rules(?). Observe the extra escape characters ('\')
 powershell_script 'rename-computer' do
   code "Rename-Computer -NewName #{node['windows-tweaks']['new-computername']}"
-  # notifies :reboot_now, 'reboot[restart-computer]', :delayed
+  notifies :reboot_now, 'reboot[restart-computer]', :delayed
   # notifies :reboot_now, 'reboot[restart-computer]', :immediate
   not_if "($env:COMPUTERNAME -eq \'#{node['windows-tweaks']['new-computername']}\') -or (\'#{node['windows-tweaks']['new-computername']}\' -eq 'no-new-name')"
 end

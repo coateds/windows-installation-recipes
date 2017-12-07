@@ -14,17 +14,24 @@ if node['install-packages']['upgrade-chocolatey'].to_s == 'y'
   end
 end
 
+# Do not copy or install PS 5.1 if it is already there (such as on 2016)
 if node['install-packages']['powershell51'].to_s == 'y'
+  # The msu file be copied explicitly before
   cookbook_file 'Win8.1AndW2K12R2-KB3191564-x64.msu' do
     source 'Win8.1AndW2K12R2-KB3191564-x64.msu'
+    guard_interpreter :powershell_script
+    not_if "$PSVersionTable.PSVersion.Major.ToString()+'.'+$PSVersionTable.PSVersion.Minor.ToString() -eq '5.1'"
   end
 
   # This resource is idempotent w/o the PS guard
+  # but runs under 2016 when it not necessary
   msu_package 'Win8.1AndW2K12R2-KB3191564-x64.msu' do
     source 'Win8.1AndW2K12R2-KB3191564-x64.msu'
     # action :remove
     action :install
     notifies :reboot_now, 'reboot[restart-computer]', :immediate
+    guard_interpreter :powershell_script
+    not_if "$PSVersionTable.PSVersion.Major.ToString()+'.'+$PSVersionTable.PSVersion.Minor.ToString() -eq '5.1'"
   end
 end
 
@@ -80,7 +87,8 @@ if node['install-packages']['git'].to_s == 'y'
 end
 
 # Chocolatey attempts to install DotNet4.5.2 with VSCode
-# currently (Dec 2017) This fails
+# currently (Dec 2017) This fails on 2012R2
+# This does work for 2016
 # attempting to explicitly call this install ahead of VSCode
 # howwever, the DotNet install calls for a reboot
 if node['install-packages']['vscode'].to_s == 'y'
@@ -88,11 +96,8 @@ if node['install-packages']['vscode'].to_s == 'y'
   chocolatey_package 'visualstudiocode'
 end
 
-
-
 # Alternative (and favored by cookstyle) syntax for a simple conditional
 # Use this syntax when there are no options and the default action is used
-
 chocolatey_package 'chefdk' if node['install-packages']['chefdk'].to_s == 'y'
 chocolatey_package 'putty' if node['install-packages']['putty'].to_s == 'y'
 chocolatey_package 'sysinternals' if node['install-packages']['sysinternals'].to_s == 'y'
@@ -110,8 +115,6 @@ if node['install-packages']['winazpowershell'].to_s == 'y'
   end
 end
 
-
-
 if node['install-packages']['requestreboot'].to_s == 'y'
   reboot 'restart-computer' do
     action :request_reboot
@@ -124,12 +127,6 @@ reboot 'restart-computer' do
 end
 
 # notifies :reboot_now, 'reboot[Restart Computer]', :immediately
-
-# cookbook_file 'c:\scripts\install-pswindowsupdate.ps1' do
-#   source 'install-pswindowsupdate.ps1'
-# end
-
-
 
 # Command to run windows update
 # Get-WUInstall –MicrosoftUpdate –AcceptAll –AutoReboot
