@@ -5,7 +5,7 @@
 # Copyright:: 2017, The Authors, All Rights Reserved.
 
 # This will install Chocolatey if not already
-include_recipe 'chocolatey::default'
+include_recipe 'chocolatey::default' if node['install-packages']['basic-chocolatey'].to_s == 'y'
 
 # This will run an upgrade for images that include an old version
 if node['install-packages']['upgrade-chocolatey'].to_s == 'y'
@@ -112,6 +112,12 @@ if node['install-packages']['winazpowershell'].to_s == 'y'
   chocolatey_package 'windowsazurepowershell' do
     action :install
     notifies :reboot_now, 'reboot[restart-computer]', :delayed
+  end
+end
+
+if node['install-packages']['install-updates'].to_s == 'y'
+  powershell_script 'Install Updates' do
+    code "Get-WindowsUpdate -Install -AcceptAll -AutoReboot"
   end
 end
 
