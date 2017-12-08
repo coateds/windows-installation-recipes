@@ -93,7 +93,10 @@ end
 # howwever, the DotNet install calls for a reboot
 if node['install-packages']['vscode'].to_s == 'y'
   # chocolatey_package 'dotnet4.5.2'
-  chocolatey_package 'visualstudiocode'
+  chocolatey_package 'visualstudiocode' do
+    action :install
+    only_if { node[:platform_version]  == '10.0.14393' }
+  end
 end
 
 # Alternative (and favored by cookstyle) syntax for a simple conditional

@@ -15,6 +15,22 @@ describe 'windows-installation-recipes::install-iis-serverinfo' do
       runner.converge(described_recipe)
     end
 
+    it 'installs a feature' do
+      expect(chef_run).to install_windows_feature('IIS-WebServerRole')
+    end
+
+    it 'service' do
+      expect(chef_run).to enable_service('w3svc')
+    end
+
+    it 'service' do
+      expect(chef_run).to start_service('w3svc')
+    end
+
+    it 'creates a template' do
+      expect(chef_run).to create_template('c:\inetpub\wwwroot\default.htm')
+    end
+
     it 'converges successfully' do
       expect { chef_run }.to_not raise_error
     end

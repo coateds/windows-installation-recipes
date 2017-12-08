@@ -3,6 +3,13 @@
 ## Next Version goals:
 * Make this work with Windows Hyper-V kitchen VMs - (Mostly) Done
 
+## New for Dec '17
+* Functionality has been tested on 2016 servers on Hyper-V
+* Adding sample wrapper files in wrapper-cookbook-files:
+  * attributes-default.rb
+  * integration-default-test.rb
+  * recipes-default.rb
+
 ## Version 0.2.0
 Recipes
 * access-rdp
