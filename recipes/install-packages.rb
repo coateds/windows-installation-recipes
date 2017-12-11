@@ -4,6 +4,19 @@
 #
 # Copyright:: 2017, The Authors, All Rights Reserved.
 
+# A Function to return the PowerShell Version using PowerShell
+# def ps_ver
+#   ps_psver_script = <<-EOH
+#   $PSVersionTable.PSVersion.Major.ToString()+'.'+$PSVersionTable.PSVersion.Minor.ToString()
+#   EOH
+#   powershell_out(ps_psver_script).stdout.chop.to_s
+# end
+
+# ps_version = "#{ps_ver}"
+ps_version = ps_ver.to_s
+
+# Chef::Resource::User.send(:include, WindowsInstallationRecipes::HelperHelpers)
+
 # This will install Chocolatey if not already
 include_recipe 'chocolatey::default' if node['install-packages']['basic-chocolatey'].to_s == 'y'
 
@@ -19,8 +32,10 @@ if node['install-packages']['powershell51'].to_s == 'y'
   # The msu file be copied explicitly before
   cookbook_file 'Win8.1AndW2K12R2-KB3191564-x64.msu' do
     source 'Win8.1AndW2K12R2-KB3191564-x64.msu'
-    guard_interpreter :powershell_script
-    not_if "$PSVersionTable.PSVersion.Major.ToString()+'.'+$PSVersionTable.PSVersion.Minor.ToString() -eq '5.1'"
+    # guard_interpreter :powershell_script
+    # not_if "$PSVersionTable.PSVersion.Major.ToString()+'.'+$PSVersionTable.PSVersion.Minor.ToString() -eq '5.1'"
+    not_if { ps_version == '5.1' }
+    # not_if { ps_ver.to_s == '5.1' }
   end
 
   # This resource is idempotent w/o the PS guard
@@ -30,8 +45,9 @@ if node['install-packages']['powershell51'].to_s == 'y'
     # action :remove
     action :install
     notifies :reboot_now, 'reboot[restart-computer]', :immediate
-    guard_interpreter :powershell_script
-    not_if "$PSVersionTable.PSVersion.Major.ToString()+'.'+$PSVersionTable.PSVersion.Minor.ToString() -eq '5.1'"
+    # guard_interpreter :powershell_script
+    # not_if "$PSVersionTable.PSVersion.Major.ToString()+'.'+$PSVersionTable.PSVersion.Minor.ToString() -eq '5.1'"
+    not_if { ps_version == '5.1' }
   end
 end
 
