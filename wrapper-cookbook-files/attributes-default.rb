@@ -21,6 +21,8 @@ default['windows-tweaks']['general-tweaks'] = 'n'
 # Rename computer
 # Leave this at no-new-name to do nothing
 # Or set this to have a new name in ALL CAPS
+# This is unecessary when working on Azure VMs as the anem can be set in
+# the .kitchen.yml file
 default['windows-tweaks']['new-computername']  = 'no-new-name'
 # default['windows-tweaks']['new-computername']  = 'HYPERWINDOWS'
 
