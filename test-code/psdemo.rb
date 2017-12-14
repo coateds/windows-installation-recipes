@@ -114,7 +114,7 @@ puts "Recipes: #{node['recipes']}"
 puts "Roles: #{node['roles']}"
 
 puts
-puts "Addresses: #{node['ipaddress']}, #{node['macaddress']}"
+
 # Container:   puts "cpu: #{node['cpu']}"
 puts "cpu: #{node['cpu']['0']['model_name']}"
 puts "real:#{node['cpu']['real']}  cores:#{node['cpu']['cores']}  total:#{node['cpu']['total']}"
@@ -123,6 +123,7 @@ puts "c: % used: #{node['filesystem']['C:']['percent_used']}"
 
 puts
 puts "Network"
+puts "Addresses: #{node['ipaddress']}, #{node['macaddress']}"
 puts powershell_out(ps_net_script).stdout.chop.to_s
 
 puts

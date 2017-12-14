@@ -1,115 +1,99 @@
 <html>
+<head></head>
 <body>
   <!-- A Table of Ohai information -->
-  <h1>Chef 'BGInfo' from Ohai on host <%= node['hostname'] %></h1>
-  <Table cellspacing=5 cellpadding=5>
+  <h1>Ohai Information For <%= node['hostname'] %></h1>
+  <table cellspacing=2 cellpadding=2>
     <tr>
-      <td>Platform</td>
-      <td><%= node['platform'] %></td>
+      <td><%= node['fqdn'] %></td><td></td>
     </tr>
     <tr>
-      <td>Platform Version</td>
-      <td><%= node['platform_version'] %></td>
+      <td>Domain: <%= node['domain'] %></td><td></td>
     </tr>
     <tr>
-      <td>Platform Family</td>
-      <td><%= node['platform_family'] %></td>
+      <td>Platform: <%= node['platform'] %></td><td>Version: <%= node['platform_version'] %></td>
     </tr>
-    <tr>
-      <td>IP Address</td>
-      <td><%= node['ipaddress'] %></td>
-    </tr>
-    <tr>
-      <td>MAC Address</td>
-      <td><%= node['macaddress'] %></td>
-    </tr>
-    <tr>
-      <td>FQDN</td>
-      <td><%= node['fqdn'] %></td>
-    </tr>
-    <tr>
-      <td>Hostname</td>
-      <td><%= node['hostname'] %></td>
-    </tr>
-    <tr>
-      <td>Domain</td>
-      <td><%= node['domain'] %></td>
-    </tr>
-    <tr>
-      <td>Recipes</td>
-      <td><%= node['recipes'] %></td>
-    </tr>
-    <tr>
-      <td>Roles</td>
-      <td><%= node['roles'] %></td>
-    </tr>
-    <tr>
-      <td>Ohai Time</td>
-      <td><%= node['ohai_time'] %></td>
-    </tr>
-    <tr>
-      <td>cpu</td>
-      <td><%= node['cpu'] %></td>
-    </tr>
-    <tr>
-      <td>cpu real</td>
-      <td><%= node['cpu']['real'] %></td>
-    </tr>
-    <tr>
-      <td>cpu cores</td>
-      <td><%= node['cpu']['cores'] %></td>
-    </tr>
-    <tr>
-      <td>cpu total</td>
-      <td><%= node['cpu']['total'] %></td>
-    </tr>
-    <tr>
-      <td>filesystem</td>
-      <td><%= node['filesystem'] %></td>
-    </tr>
-    <tr>
-      <td>filesystem drive</td>
-      <td><%= node['filesystem']['C:']['mount'] %></td>
-    </tr>
-    <tr>
-      <td>filesystem percent used</td>
-      <td><%= node['filesystem']['C:']['percent_used'] %></td>
-    </tr>
-    <tr>
-      <td>memory</td>
-      <td><%= node['memory'] %></td>
-    </tr>
-    <tr>
-      <td>memory total</td>
-      <td><%= node['memory']['total'] %></td>
-    </tr>
-    <tr>
-      <td>network</td>
-      <td><%= node['network'] %></td>
-    </tr>
-    <tr>
-      <td>dhcp enabled</td>
-      <% if false %>
-      This is a comment block in Extended Ruby
-      The following 'dhcp_enabled' does not always work, so it is commented out in a single line for now
-      <% end %>
-      <td><%#= node['network']['interfaces']['0xe']['configuration']['dhcp_enabled'] #%></td>
-    </tr>
-    <tr>
-      <td>virtualizationinfo</td>
-      <td><%= node['VirtualizationInfo'] %></td>
-    </tr>
-  </Table>
+  </table>
+  <br><br>
 
-Much of this information gleaned from  ruby files here:
-https://github.com/chef/ohai/tree/13485c17da688654890047d1952d9f71e735d162/lib/ohai/plugins/windows
+  The information in the top half of this page is gathered from Ohai. Simply expand automatic attributes in line with the html.<br><br>
+
+  <table cellspacing=2 cellpadding=2>
+    <th>Chef Information</th>
+    <tr>
+      <td>Recipes:</td><td><%= node['recipes'] %></td>
+    </tr>
+    <tr>
+      <td>Roles:</td><td><%= node['roles'] %></td>
+    </tr>
+  </table>
 
   <br><br>
-  <p>Last Update <%= node['last_update'] %></p>
-  <p>Recipe Variable <%= node['recipe_var'] %></p>
-  <p>System Time <%= node['system_time'] %></p>
-  <p>NTP Time <%= node['ntp_time'] %></p>
-  <p>Delta Time in Seconds <%= node['delta_time_seconds'] %></p>
 
+  <table cellspacing=2 cellpadding=2>
+    <th>System Stats</th>
+    <tr>
+      <td>cpu:</td><td><%= node['cpu']['0']['model_name'] %></td><td></td>
+    </tr>
+    <tr>
+      <td>real:</td><td><%= node['cpu']['real'] %></td>
+      <td>cores:</td><td><%= node['cpu']['cores'] %></td>
+      <td>total:</td><td><%= node['cpu']['total'] %></td>
+    </tr>
+    <tr>
+      <td>c: % used:</td><td><%= node['filesystem']['C:']['percent_used'] %></td><td></td>
+    </tr>
+    <tr>
+      <td>memory:</td><td><%= node['memory']['total'] %></td><td></td>
+    </tr>
+  </table>
+
+  <br><br>
+  This table consumes the output of a PowerShell command. The powershell_out command and its optional accompanying script block can be inline within the recipe, or encapsulated within a ruby function (def block) and even placed in a library file.
+  <table cellspacing=2 cellpadding=2>
+    <th>Network</th>
+    <tr>
+      <td>Ohai Addresses:</td><td><%= node['ipaddress'] %>, <%= node['macaddress'] %></td>
+    </tr>
+    <tr>
+      <td>PowerShell Adapter Info:</td><td><%= node['install-iis-serverinfo']['ps-network'] %></td>
+    </tr>
+  </table>
+
+  <br><br>
+
+  <table cellspacing=2 cellpadding=2>
+    <th>Auto Services not Running</th>
+    <tr>
+      <td>Services:</td><td><%= node['install-iis-serverinfo']['ps-service'] %></td>
+    </tr>
+  </table>
+
+  <br><br>
+
+  <table cellspacing=2 cellpadding=2>
+    <th>NTP, System and Delta</th>
+    <tr>
+      <td>NTP Time:</td><td><%= node['install-iis-serverinfo']['ntp-obj']['NTPTime'] %></td>
+      <td>SYS Time:</td><td><%= node['install-iis-serverinfo']['ntp-obj']['SYSTime'] %></td>
+      <td>Delta Time:</td><td><%= node['install-iis-serverinfo']['ntp-obj']['DIFFTime'] %></td>
+    </tr>
+  </table>
+
+  <br><br>
+
+  <table cellspacing=2 cellpadding=2>
+    <th>Updates</th>
+    <tr>
+      <td>Last Update:</td><td><%= node['install-iis-serverinfo']['last-update'] %></td>
+    </tr>
+  </table>
+  <br><br>
+
+  <%= node['install-iis-serverinfo']['ping-domain'] %>
+  <br><br>
+
+  Much of this information gleaned from  ruby files here:
+  https://github.com/chef/ohai/tree/13485c17da688654890047d1952d9f71e735d162/lib/ohai/plugins/windows
 </body>
 </html>

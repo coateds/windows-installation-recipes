@@ -11,8 +11,8 @@
 # The template will create a page in a place according to an attribute
 #   wwwroot or c:\scripts
 
+#### Installs and configures IIS ####
 if node['install-iis-serverinfo']['install-iis'].to_s == 'y'
-
   # Installs the Web Server Feature/Role
   # powershell_script 'Install IIS' do
   #   code 'Add-WindowsFeature Web-Server'
@@ -35,77 +35,22 @@ if node['install-iis-serverinfo']['install-iis'].to_s == 'y'
   service 'w3svc' do
     action [:enable, :start]
   end
-
 end
+#### /Installs and configures IIS ####
 
+#### Gathers info, makes a webpage from template ####
 if node['install-iis-serverinfo']['create-infopage'].to_s == 'y'
+  node.default['install-iis-serverinfo']['ps-network'] = ps_net
+  node.default['install-iis-serverinfo']['ps-service'] = ps_service
+  node.default['install-iis-serverinfo']['last-update'] = ps_lastupdate
 
-  node.default['recipe_var'] = 'Gooberlicious'
+  node.default['install-iis-serverinfo']['ntp-obj'] = JSON.parse(ps_ntp)
+    # node['install-iis-serverinfo']['ntp-obj']['NTPTime']
+    # node['install-iis-serverinfo']['ntp-obj']['SYSTime']
+    # node['install-iis-serverinfo']['ntp-obj']['DIFFTime']
 
-  # cmd = powershell_out('(get-hotfix | sort installedon | select -last 1).InstalledOn')
-  # node.default['last_update'] = cmd.stdout.chop.to_s
-
-  get_ntp_script = <<-EOH
-  $NTPServer = '129.6.15.28'
-  # Build NTP request packet. We'll reuse this variable for the response packet
-  $NTPData    = New-Object byte[] 48  # Array of 48 bytes set to zero
-  $NTPData[0] = 27                    # Request header: 00 = No Leap Warning; 011 = Version 3; 011 = Client Mode; 00011011 = 27
-
-  # Open a connection to the NTP service
-  $Socket = New-Object Net.Sockets.Socket ( 'InterNetwork', 'Dgram', 'Udp' )
-  $Socket.SendTimeOut    = 2000  # ms
-  $Socket.ReceiveTimeOut = 2000  # ms
-  $Socket.Connect( $NTPServer, 123 )
-
-  # Make the request
-  $Null = $Socket.Send(    $NTPData )
-  $Null = $Socket.Receive( $NTPData )
-
-  # Clean up the connection
-  $Socket.Shutdown( 'Both' )
-  $Socket.Close()
-
-  # Extract relevant portion of first date in result (Number of seconds since "Start of Epoch")
-  $Seconds = [BitConverter]::ToUInt32( $NTPData[43..40], 0 )
-
-  # Add them to the "Start of Epoch", convert to local time zone, and return
-  # return ( [datetime]'1/1/1900' ).AddSeconds( $Seconds ).ToLocalTime()
-
-  # $obj = New-Object -TypeName PSObject
-  # Add-Member -InputObject $obj -MemberType NoteProperty -Name NTPTime -Value ( [datetime]'1/1/1900' ).AddSeconds( $Seconds ).ToLocalTime()
-  # Add-Member -InputObject $obj -MemberType NoteProperty -Name SYSTime -Value get-date
-
-  # Write-Host $obj --Does Nothing?--
-
-  # return $obj
-
-  $NTPTime = ([datetime]'1/1/1900' ).AddSeconds( $Seconds ).ToLocalTime()
-  $SysTime = Get-Date
-  $DiffTime = $NTPTime - $SysTime
-
-  $RetString = $SysTime.ToString()
-  $RetString += '~'
-  $RetString += $NTPTime.ToString()
-  $RetString += '~'
-  $RetString += [math]::abs(($NTPTime - $SysTime).TotalSeconds)
-
-
-  return $RetString
-
-  EOH
-  cmd = powershell_out(get_ntp_script)
-
-  arr = cmd.stdout.split('~')
-
-  node.default['last_update'] = powershell_out('(get-hotfix | sort installedon | select -last 1).InstalledOn').stdout.chop.to_s
-  # node.default['system_time'] = powershell_out('get-date').stdout.chop.to_s
-
-  node.default['system_time'] = arr[0]
-  node.default['ntp_time'] = arr[1]
-  node.default['delta_time_seconds'] = arr[2]
-
-  #node.default['is_correct_time'] = powershell_out('((Invoke-WebRequest -Uri \'time.is\').rawcontent).contains(\'Your time is exact\')').stdout
-  # .contains('Your time is exact')
+  # This attribute from PS Script takes the domain attribute as input
+  node.default['install-iis-serverinfo']['ping-domain'] = ps_pingdomain node['domain'].to_s
 
   # Before using the template, it must be created
   # chef generate template default
@@ -116,5 +61,5 @@ if node['install-iis-serverinfo']['create-infopage'].to_s == 'y'
   template 'c:/inetpub/wwwroot/default.htm' do
     source 'default.htm.erb'
   end
-
 end
+#### /Gathers info, makes a webpage from template ####
