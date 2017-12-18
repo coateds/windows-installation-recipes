@@ -45,9 +45,9 @@ if node['install-iis-serverinfo']['create-infopage'].to_s == 'y'
   node.default['install-iis-serverinfo']['last-update'] = ps_lastupdate
 
   node.default['install-iis-serverinfo']['ntp-obj'] = JSON.parse(ps_ntp)
-    # node['install-iis-serverinfo']['ntp-obj']['NTPTime']
-    # node['install-iis-serverinfo']['ntp-obj']['SYSTime']
-    # node['install-iis-serverinfo']['ntp-obj']['DIFFTime']
+  # node['install-iis-serverinfo']['ntp-obj']['NTPTime']
+  # node['install-iis-serverinfo']['ntp-obj']['SYSTime']
+  # node['install-iis-serverinfo']['ntp-obj']['DIFFTime']
 
   # This attribute from PS Script takes the domain attribute as input
   node.default['install-iis-serverinfo']['ping-domain'] = ps_pingdomain node['domain'].to_s

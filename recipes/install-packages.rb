@@ -74,8 +74,8 @@ end
 # For now, uninstall old first then install the new
 if node['install-packages']['PSWindowsUpdate'].to_s == 'y'
   powershell_script 'Uninstall PSWindowsUpdate' do
-    code "Uninstall-Module -Name PSWindowsUpdate"
-    not_if "(Get-Module -ListAvailable -Name PSWindowsUpdate).version.major -eq 2"
+    code 'Uninstall-Module -Name PSWindowsUpdate'
+    not_if '(Get-Module -ListAvailable -Name PSWindowsUpdate).version.major -eq 2'
   end
 
   powershell_package 'PSWindowsUpdate'
@@ -111,7 +111,7 @@ if node['install-packages']['vscode'].to_s == 'y'
   # chocolatey_package 'dotnet4.5.2'
   chocolatey_package 'visualstudiocode' do
     action :install
-    only_if { node[:platform_version]  == '10.0.14393' }
+    only_if { node[:platform_version] == '10.0.14393' }
   end
 end
 
@@ -136,7 +136,7 @@ end
 
 if node['install-packages']['install-updates'].to_s == 'y'
   powershell_script 'Install Updates' do
-    code "Get-WindowsUpdate -Install -AcceptAll -AutoReboot"
+    code 'Get-WindowsUpdate -Install -AcceptAll -AutoReboot'
   end
 end
 

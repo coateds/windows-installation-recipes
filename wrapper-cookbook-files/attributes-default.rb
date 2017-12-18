@@ -80,9 +80,10 @@ default['install-packages']['slack']              = 'n'
 
 #### access-rdp ####
 default['my_windows_rdp']['ConfigureRDP']         = 'n'
-  default['my_windows_rdp']['AllowConnections']  = 'yes'
-  default['my_windows_rdp']['AllowOnlyNLA']      = 'yes'
-  default['my_windows_rdp']['ConfigureFirewall'] = 'yes'
+
+default['my_windows_rdp']['AllowConnections']  = 'yes'
+default['my_windows_rdp']['AllowOnlyNLA']      = 'yes'
+default['my_windows_rdp']['ConfigureFirewall'] = 'yes'
 #### /access-rdp ####
 
 #### install-iis-serverinfo ####
@@ -92,5 +93,5 @@ default['install-iis-serverinfo']['infopage-path'] = 'c:\scripts'
 #### /install-iis-serverinfo ####
 
 #### powershell-demo ####
-default['powershell-demo']['beginphrase']           = 'Goodbye (Cruel)'
+default['powershell-demo']['beginphrase'] = 'Goodbye (Cruel)'
 #### /powershell-demo ####
