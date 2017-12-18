@@ -57,6 +57,12 @@ template 'c:/inetpub/wwwroot/ps-demo.htm' do
   source 'ps-demo.htm.erb'
 end
 
+processtokill = "notepad"
+
+powershell_script 'kill-process' do
+  code "get-process -name #{processtokill} | stop-process"
+end
+
 # Extended Ruby html file
 # <html>
 # <body>
