@@ -11,11 +11,10 @@
 # Test for PowerShell
 # should match does a starts with compare
 # use stdout.chop to do an exact match with eq
-  describe command("$PSVersionTable.PSVersion.Major.ToString()+'.'+$PSVersionTable.PSVersion.Minor.ToString()") do
-    its('exit_status') { should eq 0 }
-    #its('stdout') { should match('5.1') }
-    its('stdout.chop') { should eq '5.1' }
-  end
+describe command("$PSVersionTable.PSVersion.Major.ToString()+'.'+$PSVersionTable.PSVersion.Minor.ToString()") do
+  its('exit_status') { should eq 0 }
+  its('stdout.chop') { should eq '5.1' }
+end
 
 # Test for a list of apps
 # Each item will be treated as a single test
@@ -58,7 +57,6 @@ describe command('(invoke-expression "choco list visualstudiocode --exact --loca
   its('exit_status') { should eq 0 }
   its('stdout.chop') { should eq 'visualstudiocode' }
 end
-
 
 describe command('choco list sysinternals --exact --local-only --limit-output') do
   its('exit_status') { should eq 0 }

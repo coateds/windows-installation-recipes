@@ -23,7 +23,7 @@ default['windows-tweaks']['general-tweaks'] = 'n'
 # Or set this to have a new name in ALL CAPS
 # This is unecessary when working on Azure VMs as the anem can be set in
 # the .kitchen.yml file
-default['windows-tweaks']['new-computername']  = 'no-new-name'
+default['windows-tweaks']['new-computername'] = 'no-new-name'
 # default['windows-tweaks']['new-computername']  = 'HYPERWINDOWS'
 
 # The reboot notification attached to the rename is set to delayed
@@ -69,10 +69,10 @@ default['install-packages']['rdcman']             = 'n'
 default['install-packages']['slack']              = 'n'
 
 # default['install-packages']['winazpowershell'].to_s == 'y'
-    # chocolatey_package 'windowsazurepowershell' do
-        #  windowsazurepowershell_0871
-        # Appears to need a reboot still
-        # This appears to be less usefull at this time?
+# chocolatey_package 'windowsazurepowershell' do
+#  windowsazurepowershell_0871
+# Appears to need a reboot still
+# This appears to be less usefull at this time?
 
 # azure-cli
 

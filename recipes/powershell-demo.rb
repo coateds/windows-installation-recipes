@@ -72,7 +72,7 @@ end
 # </body>
 
 # Stuart Preston Example
-#ruby_block 'PSObject to Hash' do
+# ruby_block 'PSObject to Hash' do
 #    block do
 #      script = <<-EOH
 #      $obj = New-Object -TypeName PSObject

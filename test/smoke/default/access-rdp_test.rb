@@ -9,7 +9,7 @@
 # Allow Access
 describe registry_key ({
   hive: 'HKEY_LOCAL_MACHINE',
-  key: 'SYSTEM\CurrentControlSet\Control\Terminal Server'
+  key: 'SYSTEM\CurrentControlSet\Control\Terminal Server',
 }) do
   its('fDenyTSConnections') { should eq 0 }
 end
@@ -17,7 +17,7 @@ end
 # NLA Only
 describe registry_key ({
   hive: 'HKEY_LOCAL_MACHINE',
-  key: 'SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp'
+  key: 'SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp',
 }) do
   its('UserAuthentication') { should eq 1 }
 end

@@ -1,5 +1,5 @@
 # A Function to return the PowerShell Version using PowerShell
-#def ps_ver
+# def ps_ver
 #    ps_psver_script = <<-EOH
 #    $PSVersion = $PSVersionTable.PSVersion.Major.ToString()+'.'+$PSVersionTable.PSVersion.Minor.ToString()
 #    $PSVersion
@@ -7,8 +7,7 @@
 #    # Else {$False}
 #    EOH
 #    powershell_out(ps_psver_script).stdout.chop.to_s
-#end
-
+# end
 
 # def ps_ver
 #     ps_psver_script = <<-EOH
@@ -102,14 +101,14 @@ EOH
 
 puts
 puts
-puts "Ohai Information For"
+puts 'Ohai Information For'
 puts "Hostname: #{node['hostname']}, (#{node['fqdn']})"
 puts "Domain: #{node['domain']}"
 puts "Platform: #{node['platform']}, (v #{node['platform_version']})"
 # Not relevant in Windows  puts "Platform Family: #{node['platform_family']}"
 
 puts
-puts "Chef Information"
+puts 'Chef Information'
 puts "Recipes: #{node['recipes']}"
 puts "Roles: #{node['roles']}"
 
@@ -122,7 +121,7 @@ puts "memory: #{node['memory']['total']}"
 puts "c: % used: #{node['filesystem']['C:']['percent_used']}"
 
 puts
-puts "Network"
+puts 'Network'
 puts "Addresses: #{node['ipaddress']}, #{node['macaddress']}"
 puts powershell_out(ps_net_script).stdout.chop.to_s
 
@@ -134,9 +133,9 @@ puts "virtualizationinfo: #{node['VirtualizationInfo']}"
 dt = powershell_out(ps_ntp_script)
 node.default['obj'] = JSON.parse(dt.stdout)
 puts
-puts "Time Diff"
+puts 'Time Diff'
 puts "NTPTime: #{node['obj']['NTPTime']}  SYSTime: #{node['obj']['SYSTime']}  DIFFTime: #{node['obj']['DIFFTime']}"
 
 puts
-puts "Stopped Services set to Auto"
+puts 'Stopped Services set to Auto'
 puts powershell_out(ps_service_script).stdout.chop.to_s

@@ -94,7 +94,7 @@ module WindowsInstallationRecipes
       powershell_out(ps_lastupdate_script).stdout.chop.to_s
     end
 
-    def ps_pingdomain domain
+    def ps_pingdomain(domain)
       ps_ping_domain = <<-EOH
       Test-Connection "#{domain}" -count 1 | Select-Object PSComputerName,Address,IPV4Address | ConvertTo-Html
       EOH

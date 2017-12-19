@@ -11,6 +11,6 @@ domain_member_script = <<-EOH
 EOH
 
 describe powershell(domain_member_script) do
-its('stdout.chop') { should eq 'expcoatelab.com' }
+  its('stdout.chop') { should eq 'expcoatelab.com' }
 end
 #### /active-directory ####
