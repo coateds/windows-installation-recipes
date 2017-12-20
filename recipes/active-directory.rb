@@ -14,7 +14,6 @@ windows_ad_computer node['windows-tweaks']['new-computername'] do
   restart true
 end
 
-
 # windows_ad_computer 'HYPERWINDOWS16' do
 #   action :unjoin
 #   domain_pass 'H0rnyBunny'
