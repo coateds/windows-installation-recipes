@@ -35,6 +35,9 @@ if node['install-iis-serverinfo']['install-iis'].to_s == 'y'
   service 'w3svc' do
     action [:enable, :start]
   end
+
+  # put the serverinfo page at the root of the IIS web site
+  node.override['install-iis-serverinfo']['infopage-path'] = 'c:/inetpub/wwwroot'
 end
 #### /Installs and configures IIS ####
 
@@ -58,7 +61,7 @@ if node['install-iis-serverinfo']['create-infopage'].to_s == 'y'
   # This tends to be case sensitive
   # Templates can use ohai automatic attributes for display
   #   This might be used to generate a kind of Chef generated BGInfo
-  template 'c:/inetpub/wwwroot/default.htm' do
+  template "#{node['install-iis-serverinfo']['infopage-path']}/default.htm" do
     source 'default.htm.erb'
   end
 end

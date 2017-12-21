@@ -65,6 +65,12 @@ describe command('(invoke-expression "choco list git --exact --local-only --limi
   its('stdout.chop') { should eq 'git' }
 end
 
+# Here the cli for Chocolatey is wrapped in PowerShell, in order to use the .substring command for just the first sixteen chrs
+describe command('(invoke-expression "choco list visualstudiocode --exact --local-only --limit-output").substring(0,16)') do
+  its('exit_status') { should eq 0 }
+  its('stdout.chop') { should eq 'visualstudiocode' }
+end
+
 describe command('(invoke-expression "choco list chefdk --exact --local-only --limit-output").substring(0,6)') do
   its('exit_status') { should eq 0 }
   its('stdout.chop') { should eq 'chefdk' }
@@ -140,4 +146,19 @@ end
 # describe command('(Invoke-WebRequest localhost).StatusCode') do
 #   its('stdout.chop') { should eq '200' }
 # end
+
+# C:\scripts\default.htm or C:\inetpub\wwwroot\default.htm
+describe file('C:\inetpub\wwwroot\default.htm') do
+  it { should exist }
+end
 #### /install-iis-serverinfo ####
+
+#### active-directory ####
+domain_member_script = <<-EOH
+(Get-WmiObject -Class Win32_ComputerSystem).Domain
+EOH
+
+describe powershell(domain_member_script) do
+  its('stdout.chop') { should eq 'expcoatelab.com' }
+end
+#### /active-directory ####

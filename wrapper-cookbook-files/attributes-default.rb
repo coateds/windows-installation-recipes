@@ -21,10 +21,10 @@ default['windows-tweaks']['general-tweaks'] = 'n'
 # Rename computer
 # Leave this at no-new-name to do nothing
 # Or set this to have a new name in ALL CAPS
-# This is unecessary when working on Azure VMs as the anem can be set in
+# This is unecessary when working on Azure VMs as the name can be set in
 # the .kitchen.yml file
 default['windows-tweaks']['new-computername'] = 'no-new-name'
-# default['windows-tweaks']['new-computername']  = 'HYPERWINDOWS'
+# default['windows-tweaks']['new-computername'] = 'HYPERWINDOWS'
 
 # The reboot notification attached to the rename is set to delayed
 # This means it will reboot at the end if nothing else calls an immediate reboot
@@ -68,6 +68,9 @@ default['install-packages']['pester']             = 'n'
 default['install-packages']['rdcman']             = 'n'
 default['install-packages']['slack']              = 'n'
 
+# Run windows update
+default['install-packages']['install-updates']    = 'n'
+
 # default['install-packages']['winazpowershell'].to_s == 'y'
 # chocolatey_package 'windowsazurepowershell' do
 #  windowsazurepowershell_0871
@@ -95,3 +98,14 @@ default['install-iis-serverinfo']['infopage-path'] = 'c:\scripts'
 #### powershell-demo ####
 default['powershell-demo']['beginphrase'] = 'Goodbye (Cruel)'
 #### /powershell-demo ####
+
+#### active-directory ####
+# For a new instance, set this to 'unjoin' to take no action.
+# The must be a reboot between the rename action at the beginning
+# and this resource. For 2012R2 this will happen after PowerShell 5.1
+# For 2016, another solution needs to be developed
+default['active-directory']['action'] = :join
+default['active-directory']['domain_pass'] = 'H0rnyBunny'
+default['active-directory']['domain_user'] = 'Administrator'
+default['active-directory']['domain_name'] = 'expcoatelab.com'
+#### /active-directory ####

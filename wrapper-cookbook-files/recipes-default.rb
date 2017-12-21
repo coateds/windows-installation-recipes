@@ -12,5 +12,5 @@ include_recipe 'windows-installation-recipes::install-packages'
 include_recipe 'windows-installation-recipes::access-rdp'
 include_recipe 'windows-installation-recipes::install-iis-serverinfo'
 
-# include_recipe 'windows-installation-recipes::active-directory'
+include_recipe 'windows-installation-recipes::active-directory'
 # include_recipe 'windows-installation-recipes::powershell-demo'
