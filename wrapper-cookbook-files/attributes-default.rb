@@ -104,7 +104,7 @@ default['powershell-demo']['beginphrase'] = 'Goodbye (Cruel)'
 # The must be a reboot between the rename action at the beginning
 # and this resource. For 2012R2 this will happen after PowerShell 5.1
 # For 2016, another solution needs to be developed
-default['active-directory']['action'] = :join
+default['active-directory']['action'] = :unjoin
 default['active-directory']['domain_pass'] = 'H0rnyBunny'
 default['active-directory']['domain_user'] = 'Administrator'
 default['active-directory']['domain_name'] = 'expcoatelab.com'
