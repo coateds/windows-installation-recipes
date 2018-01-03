@@ -58,17 +58,17 @@ if node['my_windows_rdp']['ConfigureRDP'].to_s == 'y'
   # This uses Ruby code to decide what action to take and a powershell_script resouce to take action
   # No the most Chef-y way to do it, but much less confusing than my attempts to do it with guards
   if fw_rule_enabled == 'False' && fw_should_be_enabled == 'yes'
-    puts 'FW rule should be enabled, and is not. Enable it'
+    # 'FW rule should be enabled, and is not. Enable it'
     powershell_script 'Enable FW Rule' do
       code 'Enable-NetFirewallRule -DisplayGroup "Remote Desktop"'
     end
   elsif fw_rule_enabled == 'True' && fw_should_be_enabled == 'no'
-    puts 'FW rule should NOT be enabled, and is. Disable it'
+    # 'FW rule should NOT be enabled, and is. Disable it'
     powershell_script 'Enable FW Rule' do
       code 'Disable-NetFirewallRule -DisplayGroup "Remote Desktop"'
     end
   else
-    puts 'No change to FW rule required'
+    # 'No change to FW rule required'
   end
 
 end

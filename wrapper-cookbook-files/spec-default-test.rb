@@ -56,7 +56,6 @@ describe 'hyperwindows2016_1::default' do
       expect(resourceps).to notify('reboot[restart-computer]').to(:reboot_now).immediately
     end
 
-
     it 'installs powershell Windows update package' do
       expect(chef_run).to install_powershell_package('PSWindowsUpdate')
     end
@@ -68,6 +67,32 @@ describe 'hyperwindows2016_1::default' do
 
     it 'installs VS Code' do
       expect(chef_run).to install_chocolatey_package('visualstudiocode')
+    end
+    #### /install-packages ####
+
+    #### access-rdp ####
+    it 'modifies a registry_key' do
+      expect(chef_run).to create_registry_key('HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Terminal Server').with(
+        unscrubbed_values: [
+          {
+            name: 'fDenyTSConnections',
+            type: :dword,
+            data: 0,
+          }
+        ]
+      )
+    end
+
+    it 'modifies a registry_key' do
+      expect(chef_run).to create_registry_key('HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Terminal Server\\WinStations\\RDP-Tcp').with(
+        unscrubbed_values: [
+          {
+            name: 'UserAuthentication',
+            type: :dword,
+            data: 1,
+          }
+        ]
+      )
     end
 
     it 'converges successfully' do
