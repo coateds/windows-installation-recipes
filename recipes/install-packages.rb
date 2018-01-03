@@ -14,6 +14,7 @@
 
 # ps_version = "#{ps_ver}"
 ps_version = ps_ver.to_s
+node.default['psversion'] = ps_ver.to_s
 
 # Chef::Resource::User.send(:include, WindowsInstallationRecipes::HelperHelpers)
 
@@ -34,8 +35,8 @@ if node['install-packages']['powershell51'].to_s == 'y'
     source 'Win8.1AndW2K12R2-KB3191564-x64.msu'
     # guard_interpreter :powershell_script
     # not_if "$PSVersionTable.PSVersion.Major.ToString()+'.'+$PSVersionTable.PSVersion.Minor.ToString() -eq '5.1'"
-    not_if { ps_version == '5.1' }
-    # not_if { ps_ver.to_s == '5.1' }
+    # not_if { ps_version == '5.1' }
+    not_if { node['psversion'] == '5.1'}
   end
 
   # This resource is idempotent w/o the PS guard
@@ -47,7 +48,8 @@ if node['install-packages']['powershell51'].to_s == 'y'
     notifies :reboot_now, 'reboot[restart-computer]', :immediate
     # guard_interpreter :powershell_script
     # not_if "$PSVersionTable.PSVersion.Major.ToString()+'.'+$PSVersionTable.PSVersion.Minor.ToString() -eq '5.1'"
-    not_if { ps_version == '5.1' }
+    # not_if { ps_version == '5.1' }
+    not_if { node['psversion'] == '5.1'}
   end
 end
 
@@ -73,10 +75,10 @@ end
 # This messes up existing tests
 # For now, uninstall old first then install the new
 if node['install-packages']['PSWindowsUpdate'].to_s == 'y'
-  powershell_script 'Uninstall PSWindowsUpdate' do
-    code 'Uninstall-Module -Name PSWindowsUpdate'
-    not_if '(Get-Module -ListAvailable -Name PSWindowsUpdate).version.major -eq 2'
-  end
+  # powershell_script 'Uninstall PSWindowsUpdate' do
+  #   code 'Uninstall-Module -Name PSWindowsUpdate'
+  #   not_if '(Get-Module -ListAvailable -Name PSWindowsUpdate).version.major -eq 2'
+  # end
 
   powershell_package 'PSWindowsUpdate'
   # powershell_script 'update-pswindowsupdate' do
@@ -111,7 +113,8 @@ if node['install-packages']['vscode'].to_s == 'y'
   # chocolatey_package 'dotnet4.5.2'
   chocolatey_package 'visualstudiocode' do
     action :install
-    only_if { node[:platform_version] == '10.0.14393' }
+    # only_if { node[:platform_version] == '10.0.14393' }
+    only_if { node['platform_version'] == '10.0.14393' }
   end
 end
 
