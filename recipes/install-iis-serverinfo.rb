@@ -55,6 +55,9 @@ if node['install-iis-serverinfo']['create-infopage'].to_s == 'y'
   # This attribute from PS Script takes the domain attribute as input
   node.default['install-iis-serverinfo']['ping-domain'] = ps_pingdomain node['domain'].to_s
 
+  # Get a list of Chocolatey packages
+  node.default['install-iis-serverinfo']['choco-list'] = ps_chocolist
+
   # Before using the template, it must be created
   # chef generate template default
   # Create the file templates\default.htm.erb

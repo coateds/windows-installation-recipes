@@ -90,6 +90,14 @@
   </table>
   <br><br>
 
+  <table cellspacing=2 cellpadding=2>
+    <th>Chocolatey Packages</th>
+    <tr>
+      <td>Packages:</td><td><%= node['install-iis-serverinfo']['choco-list'] %></td>
+    </tr>
+  </table>
+  <br><br>
+
   <%= node['install-iis-serverinfo']['ping-domain'] %>
   <br><br>
 

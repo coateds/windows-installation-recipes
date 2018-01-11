@@ -100,6 +100,16 @@ module WindowsInstallationRecipes
       EOH
       powershell_out(ps_ping_domain).stdout.chop.to_s
     end
+
+    def ps_chocolist
+      ps_choco_list_script = <<-EOH
+      $pkgs = Invoke-Expression "choco list -l"
+      foreach ($item in $pkgs) {$ret += $item + '<br>'}
+      $ret
+      # choco list -l
+      EOH
+      powershell_out(ps_choco_list_script).stdout.chop.to_s
+    end
   end
 end
 
