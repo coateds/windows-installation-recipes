@@ -95,6 +95,10 @@ describe 'hyperwindows2016_1::default' do
       )
     end
 
+    # Enable Firewall Rule test to be built
+
+    #### /access-rdp ####
+
     it 'converges successfully' do
       expect { chef_run }.to_not raise_error
     end
