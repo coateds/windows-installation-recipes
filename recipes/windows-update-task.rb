@@ -4,11 +4,10 @@
 #
 # Copyright:: 2018, The Authors, All Rights Reserved.
 
-# Try running updates on select machines every 30 min
+# Try running updates daily with the time set via attribute
 windows_task 'windows-update' do
   command 'powershell get-windowsupdate -Install -AcceptAll -AutoReboot | out-file -append c:\scripts\WindowsUpdateLog.log'
   run_level :highest
-  frequency :minute
-  frequency_modifier 30
-  # start_time '09:22'
+  frequency :daily
+  start_time "#{node['windows-update-task']['start-time']}"
 end
