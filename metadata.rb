@@ -4,15 +4,18 @@ maintainer_email 'you@example.com'
 license 'All Rights Reserved'
 description 'Installs/Configures windows-installation-recipes'
 long_description 'Installs/Configures windows-installation-recipes'
-version '0.3.1'
+version '0.3.2'
 chef_version '>= 12.1' if respond_to?(:chef_version)
 
 # Versions
-# 0.3.0
-# First to be used on Hosted Chef
+# 0.3.2
+# Adds a testing version of windows-update-task recipe
 
 # 0.3.1
 # Adds Choco list -l to info html file
+
+# 0.3.0
+# First to be used on Hosted Chef
 
 # The `issues_url` points to the location where issues for this cookbook are
 # tracked.  A `View Issues` link will be displayed on this cookbook's page when
