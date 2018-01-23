@@ -103,12 +103,21 @@ module WindowsInstallationRecipes
 
     def ps_chocolist
       ps_choco_list_script = <<-EOH
-      $pkgs = Invoke-Expression "choco list -l"
+      $pkgs = Invoke-Expression "choco list -l -r"
       foreach ($item in $pkgs) {$ret += $item + '<br>'}
       $ret
       # choco list -l
       EOH
       powershell_out(ps_choco_list_script).stdout.chop.to_s
+    end
+
+    def ps_chocooutdated
+      ps_choco_outdated_script = <<-EOH
+      $pkgs = Invoke-Expression "choco outdated -r"
+      foreach ($item in $pkgs) {$ret += $item + '<br>'}
+      $ret
+      EOH
+      powershell_out(ps_choco_outdated_script).stdout.chop.to_s
     end
   end
 end

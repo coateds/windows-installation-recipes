@@ -57,6 +57,7 @@ if node['install-iis-serverinfo']['create-infopage'].to_s == 'y'
 
   # Get a list of Chocolatey packages
   node.default['install-iis-serverinfo']['choco-list'] = ps_chocolist
+  node.default['install-iis-serverinfo']['choco-outdated'] = ps_chocooutdated
 
   # Before using the template, it must be created
   # chef generate template default
@@ -69,3 +70,9 @@ if node['install-iis-serverinfo']['create-infopage'].to_s == 'y'
   end
 end
 #### /Gathers info, makes a webpage from template ####
+
+# This will add borders to the PowerShell tables
+node.override['install-iis-serverinfo']['ps-service'] = node['install-iis-serverinfo']['ps-service'].sub '<table>', '<table cellspacing=0 cellpadding=2 border=1>'
+node.override['install-iis-serverinfo']['ps-network'] = node['install-iis-serverinfo']['ps-network'].sub '<table>', '<table cellspacing=0 cellpadding=2 border=1>'
+node.override['install-iis-serverinfo']['choco-list'] = node['install-iis-serverinfo']['choco-list'].sub '<table>', '<table cellspacing=0 cellpadding=2 border=1>'
+node.override['install-iis-serverinfo']['choco-outdated'] = node['install-iis-serverinfo']['choco-outdated'].sub '<table>', '<table cellspacing=0 cellpadding=2 border=1>'

@@ -1,0 +1,107 @@
+<html>
+<head></head>
+<body>
+  <!-- A Table of Ohai information -->
+  <h1>Ohai Information For <%= node['hostname'] %></h1>
+  <table cellspacing=2 cellpadding=2>
+    <tr>
+      <td><%= node['fqdn'] %></td><td></td>
+    </tr>
+    <tr>
+      <td>Domain: <%= node['domain'] %></td><td></td>
+    </tr>
+    <tr>
+      <td>Platform: <%= node['platform'] %></td><td>Version: <%= node['platform_version'] %></td>
+    </tr>
+  </table>
+  <br><br>
+
+  The information in the top half of this page is gathered from Ohai. Simply expand automatic attributes in line with the html.<br><br>
+
+  <table cellspacing=2 cellpadding=2>
+    <th>Chef Information</th>
+    <tr>
+      <td>Recipes:</td><td><%= node['recipes'] %></td>
+    </tr>
+    <tr>
+      <td>Roles:</td><td><%= node['roles'] %></td>
+    </tr>
+  </table>
+
+  <br><br>
+
+  <table cellspacing=2 cellpadding=2>
+    <th>System Stats</th>
+    <tr>
+      <td>cpu:</td><td><%= node['cpu']['0']['model_name'] %></td><td></td>
+    </tr>
+    <tr>
+      <td>real:</td><td><%= node['cpu']['real'] %></td>
+      <td>cores:</td><td><%= node['cpu']['cores'] %></td>
+      <td>total:</td><td><%= node['cpu']['total'] %></td>
+    </tr>
+    <tr>
+      <td>c: % used:</td><td><%= node['filesystem']['C:']['percent_used'] %></td><td></td>
+    </tr>
+    <tr>
+      <td>memory:</td><td><%= node['memory']['total'] %></td><td></td>
+    </tr>
+  </table>
+
+  <br><br>
+  This table consumes the output of a PowerShell command. The powershell_out command and its optional accompanying script block can be inline within the recipe, or encapsulated within a ruby function (def block) and even placed in a library file.
+  <table cellspacing=2 cellpadding=2>
+    <th>Network</th>
+    <tr>
+      <td>Ohai Addresses:</td><td><%= node['ipaddress'] %>, <%= node['macaddress'] %></td>
+    </tr>
+    <tr>
+      <td>PowerShell Adapter Info:</td><td><%= node['install-iis-serverinfo']['ps-network'] %></td>
+    </tr>
+  </table>
+
+  <br><br>
+
+  <table cellspacing=2 cellpadding=2>
+    <th>Auto Services not Running</th>
+    <tr>
+      <td>Services:</td><td><%= node['install-iis-serverinfo']['ps-service'] %></td>
+    </tr>
+  </table>
+
+  <br><br>
+
+  <table cellspacing=2 cellpadding=2>
+    <th>NTP, System and Delta</th>
+    <tr>
+      <td>NTP Time:</td><td><%= node['install-iis-serverinfo']['ntp-obj']['NTPTime'] %></td>
+      <td>SYS Time:</td><td><%= node['install-iis-serverinfo']['ntp-obj']['SYSTime'] %></td>
+      <td>Delta Time:</td><td><%= node['install-iis-serverinfo']['ntp-obj']['DIFFTime'] %></td>
+    </tr>
+  </table>
+
+  <br><br>
+
+  <table cellspacing=2 cellpadding=2>
+    <th>Updates</th>
+    <tr>
+      <td>Last Update:</td><td><%= node['install-iis-serverinfo']['last-update'] %></td>
+    </tr>
+  </table>
+  <br><br>
+
+  <table cellspacing=2 cellpadding=2>
+    <th>Chocolatey Packages</th>
+    <tr>
+      <td>Packages:</td><td><%= node['install-iis-serverinfo']['choco-list'] %></td>
+    </tr>
+  </table>
+  <br><br>
+
+  <%= node['install-iis-serverinfo']['ping-domain'] %>
+  <br><br>
+
+  Much of this information gleaned from  ruby files here:
+  https://github.com/chef/ohai/tree/13485c17da688654890047d1952d9f71e735d162/lib/ohai/plugins/windows
+</body>
+</html>
